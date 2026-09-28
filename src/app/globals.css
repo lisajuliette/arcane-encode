@@ -1,26 +1,292 @@
+/*
+ * Arcane Encode design system: global stylesheet
+ * Target: Next.js App Router + Tailwind CSS v4 (CSS-first config, no tailwind.config.js)
+ * Copy to: src/app/globals.css
+ *
+ * Source of truth for values: design-system/tokens.json
+ * Fonts: provided by the `geist` npm package via next/font (see docs/01-stack-and-setup.md),
+ * which exposes --font-geist-sans and --font-geist-mono on <html>.
+ */
+
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+ * 1. Raw + semantic tokens as CSS variables
+ *    Dark is the primary theme. Light exists for print/docs only.
+ * ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Corporate palette (identical in every theme) */
+  --ae-black: #000000;
+  --ae-white: #ffffff;
+  --ae-grey: #8c8c8c;
+  --ae-periwinkle: #b0accf;
+
+  /* Semantic: dark (default) */
+  --ae-surface: #000000;
+  --ae-surface-raised: #141414;
+  --ae-surface-hover: #1f1f1f;
+  --ae-line: #2e2e2e;
+  --ae-line-strong: #5a5a5a;
+  --ae-ink: var(--ae-white);
+  --ae-ink-muted: var(--ae-grey);
+  --ae-accent: var(--ae-periwinkle);
+  --ae-on-accent: var(--ae-black);
+  --ae-accent-text: var(--ae-periwinkle);
+  --ae-accent-tint: #2a2838;
+  --ae-focus: var(--ae-accent-text);
+  --ae-danger: #ff6b5b;
+
+  /* Glyph field / decorative marks (design uses line-strong for these) */
+  --ae-glyph: var(--ae-line-strong);
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --ae-surface: #ffffff;
+  --ae-surface-raised: #f4f4f4;
+  --ae-surface-hover: #ebebeb;
+  --ae-line: #d6d6d6;
+  --ae-line-strong: #8a8a8a;
+  --ae-ink: var(--ae-black);
+  --ae-ink-muted: #6b6b6b;
+  --ae-accent-text: #5e5896;
+  --ae-accent-tint: #e9e8f3;
+  --ae-danger: #b3261e;
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------
+ * 2. Tailwind theme. Default palettes/radii are wiped so ONLY
+ *    design-system values exist as utilities.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* Radius: square by default */
+  --radius-none: 0;
+  --radius-tag: 2px;
+  --radius-pill: 999px;
+
+  /* Named spacing (numeric Tailwind spacing still works; see docs/02) */
+  --spacing-gutter: 24px;       /* space-4: grid gutter, card padding */
+  --spacing-page: 40px;         /* space-5: desktop page margin */
+  --spacing-page-sm: 16px;      /* space-3: mobile page margin */
+  --spacing-section: 120px;     /* space-7: between sections (desktop) */
+  --spacing-section-sm: 80px;   /* between sections (mobile) */
+  --spacing-hero: 160px;        /* hero top padding + gap to meta strip (desktop) */
+  --spacing-hero-sm: 80px;      /* hero top padding (mobile) */
+
+  /* Layout */
+  --container-site: 1440px;
+  --breakpoint-lg: 1024px;      /* desktop layout switches on at lg */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-black: var(--ae-black);
+  --color-white: var(--ae-white);
+  --color-grey: var(--ae-grey);
+  --color-periwinkle: var(--ae-periwinkle);
+
+  --color-surface: var(--ae-surface);
+  --color-surface-raised: var(--ae-surface-raised);
+  --color-surface-hover: var(--ae-surface-hover);
+  --color-line: var(--ae-line);
+  --color-line-strong: var(--ae-line-strong);
+  --color-ink: var(--ae-ink);
+  --color-ink-muted: var(--ae-ink-muted);
+  --color-accent: var(--ae-accent);
+  --color-on-accent: var(--ae-on-accent);
+  --color-accent-text: var(--ae-accent-text);
+  --color-accent-tint: var(--ae-accent-tint);
+  --color-focus: var(--ae-focus);
+  --color-danger: var(--ae-danger);
+  --color-glyph: var(--ae-glyph);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-display: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ------------------------------------------------------------------
+ * 3. Type styles as composite utilities. Use these, never raw
+ *    font-size utilities. All accept variants: `lg:type-h1`.
+ * ------------------------------------------------------------------ */
+@utility type-display {
+  font-family: var(--font-display);
+  font-size: 88px;
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+@utility type-display-sm {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+@utility type-h1 {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+@utility type-h1-sm {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+@utility type-h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+@utility type-h2-sm {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+@utility type-h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+@utility type-body {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+}
+@utility type-body-lg {
+  /* only used for the contact email link on desktop */
+  font-family: var(--font-mono);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+}
+@utility type-body-sm {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+}
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@utility type-glyph {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+  white-space: pre;
+}
+@utility type-wordmark-giant {
+  /* Footer wordmark. Deliberate exception to "display for hero only". */
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------
+ * 4. Base layer
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    background: var(--ae-surface);
+    color: var(--ae-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+  body {
+    margin: 0;
+    background: var(--ae-surface);
+    color: var(--ae-ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 24px;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--ae-accent);
+    color: var(--ae-on-accent);
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--ae-focus);
+    outline-offset: 2px;
+  }
+  h1, h2, h3, h4, p, pre {
+    margin: 0;
+  }
+  [id] {
+    scroll-margin-top: 80px; /* sticky header height */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------------
+ * 5. Motion (disabled under prefers-reduced-motion below)
+ * ------------------------------------------------------------------ */
+@keyframes ae-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ae-status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@utility animate-ticker {
+  animation: ae-ticker 40s linear infinite;
+}
+
+@utility animate-status-pulse {
+  animation: ae-status-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
